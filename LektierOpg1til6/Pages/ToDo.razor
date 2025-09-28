@@ -1,0 +1,103 @@
+﻿@page "/todo"
+@* @rendermode InteractiveServer 
+Fjernet da den ellers ikke kan køre, der kommer fejlen: 
+The name *InteractiveServer* does not exist in the current context 
+*@
+
+<PageTitle>Todo</PageTitle>
+
+<h1 class="todo-header">Todo (@todos.Count(todo => !todo.IsDone))</h1>
+
+<h3 class="todo-title text-success">Things to do:</h3>
+<ul>
+	@foreach (var todo in todos)
+	{
+		<li>
+			<input type="checkbox" @onchange="(e) => OnCheckboxChanged(todo, e)" />
+			<input @bind="todo.Title" />
+		</li>
+	}
+</ul>
+
+
+<input placeholder="Something todo" @bind="newTodo" />
+
+<button class="btn btn-purple" @onclick="AddTodo">Add todo</button>
+
+<h3 class="todo-title text-secondary">Things I have done:</h3>
+<ul>
+	@foreach (var todo in doneTodos)
+	{
+		<li>
+			<input type="checkbox" checked @onchange="(e) => OnCheckboxChanged(todo, e)" />
+			@todo.Title
+			<button class="btn btn-danger" @onclick="() => RemoveFromDone(todo)">Slet</button>
+		</li>
+	}
+</ul>
+
+
+@code {
+	private List<TodoItem> todos = [];
+	private List<TodoItem> doneTodos = [];
+	private string? newTodo;
+
+	private void AddTodo()
+	{
+		if (!string.IsNullOrWhiteSpace(newTodo))
+		{
+			todos.Add(new TodoItem { Title = newTodo });
+			newTodo = string.Empty;
+		}
+	}
+
+	private void OnCheckboxChanged(TodoItem todo, ChangeEventArgs e)
+	{
+		bool isDone = (bool)e.Value!;
+
+		if (isDone)
+		{
+			todos.Remove(todo);
+			todo.IsDone = true;
+			doneTodos.Add(todo);
+		}
+		else
+		{
+			doneTodos.Remove(todo);
+			todo.IsDone = false;
+			todos.Add(todo);
+		}
+	}
+
+	private void RemoveFromDone(TodoItem todo)
+	{
+		doneTodos.Remove(todo);
+	}
+
+
+	// private void ToggleDone(TodoItem todo)
+	// {
+	// 	todo.IsDone = isDone;
+	// 	if (isDone)
+	// 	{
+	// 		MarkAsDone(todo);
+	// 	}
+	// 	else
+	// 	{
+	// 		MarkAsNotDone(todo);
+	// 	}
+	// }
+
+	// private void MarkAsDone(TodoItem todo)
+	// {
+	// 	todos.Remove(todo);
+	// 	doneTodos.Add(todo);
+	// }
+
+	// private void MarkAsNotDone(TodoItem todo)
+	// {
+	// 	doneTodos.Remove(todo);
+	// 	todos.Add(todo);
+	// }
+
+}

@@ -1,0 +1,31 @@
+﻿@page "/calculator"
+
+<h3>Calculator</h3>
+
+<div class="form-group">
+    <label for="number1">Number 1</label>
+    <input type="number" class="form-control" id="number1" @bind="number1">
+</div>
+<div class="form-group">
+    <label for="number2">Number 2</label>
+    <input type="number" class="form-control" id="number2" @bind="number2">
+</div>
+
+<br />
+
+<button class="btn btn-primary" @onclick="CalculateAdd">+</button>
+<button class="btn btn-primary" @onclick="CalculateMinus">-</button>
+<button class="btn btn-primary" @onclick="CalculateGange">*</button>
+<button class="btn btn-primary" @onclick="CalculateDiv">/</button>
+<button class="btn btn-primary" @onclick="CalculateFakultet">!</button>
+
+<br />
+<br />
+
+<div class="form-group">
+    <label><b>Total: </b>@total</label>
+</div>
+
+@code {
+ // private Calculator calc = new Calculator();
+}
