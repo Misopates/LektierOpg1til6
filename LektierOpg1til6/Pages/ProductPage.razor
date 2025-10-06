@@ -8,16 +8,19 @@
 
 <h1 class="mb-3 mt-3">Add Product</h1>
 
-
+<!-- Formular til at oprette/ændre et produkt -->
 <EditForm EditContext="@EditContext" class="row p-3"
 		  OnValidSubmit="@HandleValidSubmit"
 		  OnInvalidSubmit="@HandleInvalidSubmit">
+
+	<!-- Navn på produktet -->
 	<div class="col-md-12 mb-3">
 		<label for="Name">Name</label>
 		<InputText id="Name" @bind-Value="ProductModel.Name" class="form-control" />
 		<ValidationMessage For="@(() => ProductModel.Name)" />
 	</div>
 
+	<!-- Pris på produktet -->
 	<div class="col-md-6 mb-3">
 		<label for="Price">Price</label>
 		<InputNumber id="Price" @bind-Value="ProductModel.Price" class="form-control"
@@ -26,31 +29,51 @@
 		<ValidationMessage For="@(() => ProductModel.Price)" />
 	</div>
 
+	<!-- Udgivelsesdato -->
 	<div class="col-md-6 mb-3">
 		<label for="PublishedDate">Published Date</label>
 		<InputDate id="PublishedDate" @bind-Value="ProductModel.PublishedDate" class="form-control" />
 	</div>
 
+	<!-- Beskrivelse -->
 	<div class="col-md-12 mb-3">
 		<label for="Description">Description</label>
 		<InputTextArea id="Description" @bind-Value="ProductModel.Description" class="form-control" />
 	</div>
 
+	<!-- Dropdown til produkttype -->
+	<div class="col-md-6 mb-3">
+		<label for="ProductType">Produkttype</label>
+		<InputSelect id="ProductType" @bind-Value="ProductModel.ProductType" class="form-control">
+			<option value="">-- Vælg produkttype --</option>
+			@foreach (var type in ProductTypes)
+			{
+				<option value="@type">@type</option>
+			}
+		</InputSelect>
+		<ValidationMessage For="@(() => ProductModel.ProductType)" />
+	</div>
+
+	<!-- Checkbox for publiceret -->
 	<div class="col-12 mb-3">
 		<div class="form-check">
 			<InputCheckbox id="IsPublished" @bind-Value="ProductModel.IsPublished" class="form-check-input" />
 			<label class="form-check-label" for="IsPublished">Published</label>
 		</div>
 	</div>
-
+	<!-- Opret (submit)-knap -->
 	<div class="col-12 mb-3">
 		<button type="submit" class="btn btn-primary">Submit</button>
 	</div>
 
+	<!-- Validering -->
+	<!-- valgt at placere dem her da det er lige ved knappen
+		 og ikke øverst på siden-->
 	<DataAnnotationsValidator />
 	<ValidationSummary />
 </EditForm>
 
+<!-- Statusbesked -->
 @if (!string.IsNullOrEmpty(StatusMessage))
 {
 	<div class="alert @AlertClass mt-3" role="alert">
@@ -63,15 +86,19 @@
 
 <h3 class="mt-4">Produkter</h3>
 
+<!-- Liste over produkter -->
 @if (Products.Count == 0)
 {
 	<p class="text-muted">Der er endnu ingen produkter.</p>
 }
 else
 {
+	//Knap til at rydde listen 
 	<div class="mb-2">
 		<button class="btn btn-warning" @onclick="ClearProducts">Ryd listen</button>
 	</div>
+
+	// Nummereret liste over produkter 
 	<ol>
 		@foreach (var p in Products)
 		{
@@ -82,7 +109,12 @@ else
 						og er publiceret den @(p.PublishedDate.ToShortDateString() ?? "ukendt dato").
 					</div>
 					<div>Beskrivelse: @p.Description</div>
-					<div>Publiceret: @(p.IsPublished ? "Ja" : "Nej")</div>
+					<div>Produkt type: @p.ProductType</div>
+					<div style="color:@(p.IsPublished ? "green" : "red");
+												text-decoration:@(p.IsPublished ? "underline" : "none");
+												font-style:@(p.IsPublished ? "normal" : "italic")">
+						Publiceret: @(p.IsPublished ? "Ja" : "Nej")
+					</div>
 				</div>
 			</li>
 		}
