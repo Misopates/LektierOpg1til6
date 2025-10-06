@@ -1,4 +1,4 @@
-﻿namespace LektierOpg1til6
+﻿namespace LektierOpg1til6.Models
 {
     public class TodoItem
     {
