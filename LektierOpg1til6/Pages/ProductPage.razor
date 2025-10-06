@@ -12,36 +12,82 @@
 <EditForm EditContext="@EditContext" class="row p-3"
 		  OnValidSubmit="@HandleValidSubmit"
 		  OnInvalidSubmit="@HandleInvalidSubmit">
-	<DataAnnotationsValidator />
-	<ValidationSummary />
 	<div class="col-md-12 mb-3">
 		<label for="Name">Name</label>
 		<InputText id="Name" @bind-Value="ProductModel.Name" class="form-control" />
+		<ValidationMessage For="@(() => ProductModel.Name)" />
 	</div>
+
 	<div class="col-md-6 mb-3">
 		<label for="Price">Price</label>
-		<InputNumber id="Price" @bind-Value="ProductModel.Price" class="form-control" />
+		<InputNumber id="Price" @bind-Value="ProductModel.Price" class="form-control"
+					 ParsingErrorMessage="The {0} field has an invalid value."
+					 DisplayName="Product Price" />
+		<ValidationMessage For="@(() => ProductModel.Price)" />
 	</div>
+
 	<div class="col-md-6 mb-3">
 		<label for="PublishedDate">Published Date</label>
 		<InputDate id="PublishedDate" @bind-Value="ProductModel.PublishedDate" class="form-control" />
 	</div>
+
 	<div class="col-md-12 mb-3">
 		<label for="Description">Description</label>
 		<InputTextArea id="Description" @bind-Value="ProductModel.Description" class="form-control" />
 	</div>
+
 	<div class="col-12 mb-3">
 		<div class="form-check">
 			<InputCheckbox id="IsPublished" @bind-Value="ProductModel.IsPublished" class="form-check-input" />
 			<label class="form-check-label" for="IsPublished">Published</label>
 		</div>
 	</div>
+
 	<div class="col-12 mb-3">
 		<button type="submit" class="btn btn-primary">Submit</button>
 	</div>
+
 	<DataAnnotationsValidator />
 	<ValidationSummary />
 </EditForm>
+
+@if (!string.IsNullOrEmpty(StatusMessage))
+{
+	<div class="alert @AlertClass mt-3" role="alert">
+		@StatusMessage
+	</div>
+}
+
+
+<hr />
+
+<h3 class="mt-4">Produkter</h3>
+
+@if (Products.Count == 0)
+{
+	<p class="text-muted">Der er endnu ingen produkter.</p>
+}
+else
+{
+	<div class="mb-2">
+		<button class="btn btn-warning" @onclick="ClearProducts">Ryd listen</button>
+	</div>
+	<ol>
+		@foreach (var p in Products)
+		{
+			<li>
+				<div class="card mb-3 shadow-sm p-3">
+					<div>
+						@p.Name <strong>koster</strong> @p.Price.ToString("C")
+						og er publiceret den @(p.PublishedDate.ToShortDateString() ?? "ukendt dato").
+					</div>
+					<div>Beskrivelse: @p.Description</div>
+					<div>Publiceret: @(p.IsPublished ? "Ja" : "Nej")</div>
+				</div>
+			</li>
+		}
+	</ol>
+}
 
 
 @code {
