@@ -2,7 +2,7 @@ using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
-namespace LektierOpg1til6
+namespace LektierOpg1til6.Models
 {
     public class Program
     {
